@@ -6,7 +6,7 @@ import (
 	"net"
 )
 
-const Address  = "localhost:8000"
+const Address = "localhost:8000"
 
 func main() {
 	// start listening socket
