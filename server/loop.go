@@ -18,6 +18,7 @@ func ReadLoop(conn net.Conn) {
 	fmt.Fprintln(conn, "220 FTP Server ready.")
 	scanner := bufio.NewScanner(conn)
 	var parsedCommand command.Command
+	var parsingError error
 
 	// parse command from the client
 	for scanner.Scan() {
@@ -27,9 +28,18 @@ func ReadLoop(conn net.Conn) {
 		case "CLOSE":
 			parsedCommand = command.NewCommandClose(ctx)
 		case "USER":
-			//parsedCommand = parseUser(msg)
+			parsedCommand, parsingError = command.NewCommandUser(ctx, msg)
+		default:
+			fmt.Println(msg)
+			continue
 		}
-		parsedCommand.Execute()
+
+		if parsingError == nil {
+			parsedCommand.Execute()
+		} else {
+			logger.Error.Println(parsingError)
+			break
+		}
 	}
 
 	if scanner.Err() != nil {
