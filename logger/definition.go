@@ -5,6 +5,6 @@ import (
 	"os"
 )
 
-var Info = log.New(os.Stdout, "", log.Lshortfile)
+var Info = log.New(os.Stdout, "", 0)
 
 var Error = log.New(os.Stderr, "", log.Lshortfile)
