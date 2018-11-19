@@ -2,23 +2,29 @@ package main
 
 import (
 	"fmt"
+	"github.com/4hel/ftpd/logger"
+	"github.com/4hel/ftpd/server"
 	"net"
-	"os"
 )
 
-const Address  = "localhost:8000"
+const Address  = "localhost:80"
 
 func main() {
+	// start listening socket
 	listener, err := net.Listen("tcp", Address)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error starting listener: %v \n", err)
-		os.Exit(1)
+		//logger.Error.Fatal(fmt.Sprintf("error starting listener: %v \n", err))
+		logger.Error.Fatal("error starting listener: ", err)
 	}
 	fmt.Println("server listening " +  Address)
+
+	// acceppt connections and start server go routine
 	for {
-		_, err := listener.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "error accepting connection: %v \n", err)
+			logger.Error.Println("error accepting connection: ", err)
+		} else {
+			go server.ReadLoop(conn)
 		}
 	}
 }
