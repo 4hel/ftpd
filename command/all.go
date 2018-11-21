@@ -10,9 +10,12 @@ type CommandType int
 
 const (
 	ContextKeyConnection = "connection"
+	ContextKeyDataConnection = "data"
 
 	Close CommandType = 1 << iota
 	User
+	Syst
+	Pasv
 )
 
 type Command interface {
