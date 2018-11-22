@@ -48,6 +48,9 @@ func ReadLoop(conn net.Conn) {
 				conn := <- c
 				ctx = context.WithValue(ctx, command.ContextKeyDataConnection, conn)
 			}
+		case "LIST":
+			parsedCommand = command.NewCommandList(ctx)
+			parsedCommand.Execute()
 		default:
 			fmt.Println(msg)
 			continue

@@ -16,6 +16,7 @@ const (
 	User
 	Syst
 	Pasv
+	List
 )
 
 type Command interface {
@@ -32,6 +33,14 @@ func (c CommandBase) Connection() net.Conn {
 	conn, ok := c.Ctx.Value(ContextKeyConnection).(net.Conn)
 	if !ok {
 		logger.Error.Fatalln("connection not found in context")
+	}
+	return conn
+}
+
+func (c CommandBase) DataConnection() net.Conn {
+	conn, ok := c.Ctx.Value(ContextKeyDataConnection).(net.Conn)
+	if !ok {
+		logger.Error.Fatalln("data connection not found in context")
 	}
 	return conn
 }
