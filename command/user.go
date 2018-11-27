@@ -3,7 +3,6 @@ package command
 import (
 	"context"
 	"fmt"
-	"github.com/go-errors/errors"
 	"strings"
 )
 
@@ -12,20 +11,23 @@ type CommandUser struct {
 	User string
 }
 
-func NewCommandUser(ctx context.Context, msg string) (Command, error) {
+func NewCommandUser(ctx context.Context, msg string) Command {
 	parts := strings.Fields(msg)
-	if len(parts) != 2 {
-		return nil, errors.New("user command must have two words")
-	} else {
+	user := ""
+	if len(parts) > 1 {
+		user = parts[1]
+	}
 		retval := CommandUser{
 			CommandBase: CommandBase{Kind: User, Ctx: ctx},
-			User: parts[1],
+			User:        user,
 		}
-		return retval, nil
-	}
+		return retval
+
 }
 
-func (c CommandUser) Execute() {
+func (c CommandUser) Execute() context.Context {
 	conn := c.Connection()
 	fmt.Fprintf(conn, "230 User is %s.\n", c.User)
+
+	return c.Ctx
 }

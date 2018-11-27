@@ -23,7 +23,7 @@ func NewCommandList(ctx context.Context) (Command) {
 	return retval
 }
 
-func (c CommandList) Execute() {
+func (c CommandList) Execute() context.Context {
 	conn := c.Connection()
 	dataConn := c.DataConnection()
 
@@ -64,4 +64,6 @@ func (c CommandList) Execute() {
 
 	fmt.Fprintln(conn, "226 Transfer complete")
 	dataConn.Close()
+
+	return c.Ctx
 }

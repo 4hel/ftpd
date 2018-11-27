@@ -20,7 +20,7 @@ const (
 )
 
 type Command interface {
-	Execute()
+	Execute() context.Context
 	Type() CommandType
 }
 

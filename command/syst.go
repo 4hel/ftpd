@@ -16,8 +16,10 @@ func NewCommandSyst(ctx context.Context) (Command) {
 		return retval
 }
 
-func (c CommandSyst) Execute() {
+func (c CommandSyst) Execute() context.Context {
 	conn := c.Connection()
 	fmt.Fprintln(conn, "215 LINUX")
+
+	return c.Ctx
 }
 

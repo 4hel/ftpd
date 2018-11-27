@@ -13,7 +13,8 @@ func NewCommandClose(ctx context.Context) Command {
 	return retval
 }
 
-func (c CommandClose) Execute() {
+func (c CommandClose) Execute() context.Context {
 	conn := c.Connection()
 	conn.Close()
+	return c.Ctx
 }
