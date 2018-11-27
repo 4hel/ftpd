@@ -25,6 +25,9 @@ func ReadLoop(conn net.Conn) {
 		msg := scanner.Text()
 		cmd := strings.Fields(msg)[0]
 		switch cmd {
+		case "QUIT":
+			parsedCommand = command.NewCommandClose(ctx)
+			parsedCommand.Execute()
 		case "CLOSE":
 			parsedCommand = command.NewCommandClose(ctx)
 			parsedCommand.Execute()
