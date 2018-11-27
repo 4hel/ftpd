@@ -18,6 +18,7 @@ const (
 	Syst
 	Pasv
 	List
+	Pwd
 )
 
 type Command interface {
