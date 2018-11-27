@@ -19,6 +19,7 @@ const (
 	Pasv
 	List
 	Pwd
+	Cwd
 )
 
 type Command interface {
