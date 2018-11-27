@@ -7,13 +7,21 @@ import (
 	"github.com/4hel/ftpd/command"
 	"github.com/4hel/ftpd/logger"
 	"net"
+	"os"
 	"strings"
 )
 
 func ReadLoop(conn net.Conn) {
 
 	defer conn.Close()
+	dir, err := os.Getwd()
+	if err != nil {
+		logger.Error.Print(err)
+		return
+	}
+
 	ctx := context.WithValue(context.Background(), command.ContextKeyConnection, conn)
+	ctx = context.WithValue(ctx, command.ContextKeyDir, dir)
 
 	fmt.Fprintln(conn, "220 FTP Server ready.")
 	scanner := bufio.NewScanner(conn)

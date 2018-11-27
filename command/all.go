@@ -9,8 +9,9 @@ import (
 type CommandType int
 
 const (
-	ContextKeyConnection = "connection"
+	ContextKeyConnection     = "connection"
 	ContextKeyDataConnection = "data"
+	ContextKeyDir            = "dir"
 
 	Close CommandType = 1 << iota
 	User

@@ -11,12 +11,11 @@ import (
 	"time"
 )
 
-
 type CommandList struct {
 	CommandBase
 }
 
-func NewCommandList(ctx context.Context) (Command) {
+func NewCommandList(ctx context.Context) Command {
 	retval := CommandList{
 		CommandBase{Kind: List, Ctx: ctx},
 	}
@@ -29,11 +28,7 @@ func (c CommandList) Execute() context.Context {
 
 	fmt.Fprintln(conn, "150 Opening ASCII mode data connection for file list")
 
-	dir, err := os.Getwd()
-	if err != nil {
-		logger.Error.Fatal(err)
-	}
-	f, err := os.Open(dir)
+	f, err := os.Open(c.Ctx.Value(ContextKeyDir).(string))
 	if err != nil {
 		logger.Error.Fatal(err)
 	}
@@ -50,17 +45,16 @@ func (c CommandList) Execute() context.Context {
 		gid := info.Sys().(*syscall.Stat_t).Gid
 		fileUser, _ := user.LookupId(strconv.Itoa(int(uid)))
 		fileGroup, _ := user.LookupGroupId(strconv.Itoa(int(gid)))
-		fmt.Fprint(dataConn, " " + fileUser.Name)
-		fmt.Fprint(dataConn," " + fileGroup.Name + " ")
-		fmt.Fprintf(dataConn,"%13d ", info.Size())
+		fmt.Fprint(dataConn, " "+fileUser.Name)
+		fmt.Fprint(dataConn, " "+fileGroup.Name+" ")
+		fmt.Fprintf(dataConn, "%13d ", info.Size())
 
 		t := time.Unix(info.Sys().(*syscall.Stat_t).Mtim.Unix())
-		fmt.Fprint(dataConn,t.Month().String()[:3] + " ")
-		fmt.Fprintf(dataConn,"%3d ", t.Day())
-		fmt.Fprintf(dataConn,"%2d:%02d ", t.Hour(), t.Minute())
-		fmt.Fprint(dataConn,info.Name()+ "\r\n")
+		fmt.Fprint(dataConn, t.Month().String()[:3]+" ")
+		fmt.Fprintf(dataConn, "%3d ", t.Day())
+		fmt.Fprintf(dataConn, "%2d:%02d ", t.Hour(), t.Minute())
+		fmt.Fprint(dataConn, info.Name()+"\r\n")
 	}
-
 
 	fmt.Fprintln(conn, "226 Transfer complete")
 	dataConn.Close()
