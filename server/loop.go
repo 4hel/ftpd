@@ -48,6 +48,8 @@ func ReadLoop(conn net.Conn) {
 			parsedCommand = command.NewCommandPwd(ctx)
 		case "CWD":
 			parsedCommand = command.NewCommandCwd(ctx, msg)
+		case "RETR":
+			parsedCommand = command.NewCommandRetr(ctx, msg)
 
 		default:
 			fmt.Println(msg)
