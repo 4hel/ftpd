@@ -25,6 +25,7 @@ func NewCommandList(ctx context.Context) Command {
 func (c CommandList) Execute() context.Context {
 	conn := c.Connection()
 	dataConn := c.DataConnection()
+	defer dataConn.Close()
 
 	fmt.Fprintln(conn, "150 Opening ASCII mode data connection for file list")
 
@@ -57,7 +58,6 @@ func (c CommandList) Execute() context.Context {
 	}
 
 	fmt.Fprintln(conn, "226 Transfer complete")
-	dataConn.Close()
 
 	return c.Ctx
 }
