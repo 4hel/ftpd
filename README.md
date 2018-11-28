@@ -1,5 +1,5 @@
 # ftpd
-An Passive FTP Server written in GO
+An Passive FTP Server written in Go
 
 it supports the commands
 
