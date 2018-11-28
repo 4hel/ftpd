@@ -30,6 +30,8 @@ func (c CommandList) Execute() context.Context {
 	fmt.Fprintln(conn, "150 Opening ASCII mode data connection for file list")
 
 	f, err := os.Open(c.Ctx.Value(ContextKeyDir).(string))
+	defer f.Close()
+
 	if err != nil {
 		logger.Error.Fatal(err)
 	}
